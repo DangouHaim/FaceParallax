@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,7 @@ namespace _3dMon
         public MainWindow()
         {
             InitializeComponent();
+            BG.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() +  @"\sky.jpg"));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -26,14 +28,21 @@ namespace _3dMon
             {
                 Dispatcher.Invoke(() =>
                 {
-                    //Vector3D direction = new Vector3D(0, 1, 0);
                     Point3D position = new Point3D(
-                        Camera.Position.X + (ea.Coords.Item1 / 150), 
-                        Camera.Position.Y + (ea.Coords.Item2 / 150), 
-                        8);
-                    //Camera.LookDirection = direction;
+                        Camera.Position.X + (ea.Coords.Item1 / 100), 
+                        Camera.Position.Y + (ea.Coords.Item2 / 100),
+                        12);
+                    Vector3D direction = new Vector3D(
+                        Camera.LookDirection.X + (ea.Coords.Item1 / 600) * -1,
+                        Camera.LookDirection.Y + (ea.Coords.Item2 / 600) * -1,
+                        Camera.LookDirection.Z
+                        );
+                    Camera.LookDirection = direction;
                     Camera.Position = position;
                     View.Camera = Camera;
+
+                    Canvas.SetLeft(BG, Canvas.GetLeft(BG) + (ea.Coords.Item1 / 10));
+                    Canvas.SetTop(BG, Canvas.GetTop(BG) + (ea.Coords.Item2 / 10) * -1);
 
                     Title = ea.Coords.Item1 + " : " + ea.Coords.Item2;
                 });
@@ -42,11 +51,13 @@ namespace _3dMon
             {
                 Dispatcher.Invoke(() =>
                 {
-                    //Vector3D direction = new Vector3D(0, 1, 0);
-                    Point3D position = new Point3D(0.5, 0.5, 8);
-                    //Camera.LookDirection = direction;
+                    Point3D position = new Point3D(0.5, 1.5, 12);
+                    Vector3D direction = new Vector3D(0, 0, -3.5);
+                    Camera.LookDirection = direction;
                     Camera.Position = position;
                     View.Camera = Camera;
+                    Canvas.SetLeft(BG, -100);
+                    Canvas.SetTop(BG, -100);
                 });
             };
             new Thread(() =>

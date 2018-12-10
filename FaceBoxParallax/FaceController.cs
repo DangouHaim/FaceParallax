@@ -26,7 +26,7 @@ namespace FaceBoxParallax
 
         public event EventHandler<FaceControllerEventArgs> OnFaceMoving = (s, e) => 
         {
-            if(Math.Abs(_deltaX - (_lX - e.Coords.Item1)) < 25)
+            if(Math.Abs(_deltaX - (_lX - e.Coords.Item1)) < 50)
             {
                 _deltaX = _lX - e.Coords.Item1;
             }
@@ -34,7 +34,7 @@ namespace FaceBoxParallax
             {
                 _deltaX = 0;
             }
-            if (Math.Abs(_deltaY - (_lY - e.Coords.Item2)) < 25)
+            if (Math.Abs(_deltaY - (_lY - e.Coords.Item2)) < 50)
             {
                 _deltaY = _lY - e.Coords.Item2;
             }
@@ -47,10 +47,10 @@ namespace FaceBoxParallax
             _lX = e.Coords.Item1;
             _lY = e.Coords.Item2;
 
-            _deltaY = (int)_deltaY / 5;
-            _deltaY *= 5;
-            _deltaX = (int)_deltaX / 5;
-            _deltaX *= 5;
+            _deltaY = (int)_deltaY / 2;
+            _deltaY *= 2;
+            _deltaX = (int)_deltaX / 2;
+            _deltaX *= 2;
         };
 
         public event EventHandler<FaceControllerEventArgs> OnShift = (s, e) => { };
@@ -78,9 +78,13 @@ namespace FaceBoxParallax
             {
                 var imageFrame = _capture.QueryFrame().ToImage<Bgr, Byte>();
 
+
+
+
                 if (imageFrame != null)
                 {
                     var grayframe = imageFrame.Convert<Gray, byte>();
+                    //var gaus = grayframe.ThresholdAdaptive(new Gray(255), AdaptiveThresholdType.GaussianC, ThresholdType.Binary, 115, new Gray(1));
                     var faces = _cascadeClassifier.DetectMultiScale(grayframe, 1.5, 1, Size.Empty);
 
 
